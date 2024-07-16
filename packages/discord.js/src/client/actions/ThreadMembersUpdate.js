@@ -8,7 +8,14 @@ class ThreadMembersUpdateAction extends Action {
   handle(data) {
     const client = this.client;
     const thread = client.channels.cache.get(data.id);
+
     if (thread) {
+      if (thread.type === 0) {
+        console.trace();
+        client.emit(Events.Debug, `[THREAD-TEXT]: Received channel type 0 in thread members update action.`);
+        client.emit(Events.Debug, JSON.stringify(thread));
+      }
+
       thread.memberCount = data.member_count;
       const addedMembers = new Collection();
       const removedMembers = new Collection();
