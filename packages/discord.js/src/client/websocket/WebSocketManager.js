@@ -386,6 +386,9 @@ class WebSocketManager extends EventEmitter {
      * @param {Client} client The client
      */
     this.client.emit(Events.ClientReady, this.client);
+    const badChannels = this.client.channels.cache.filter(channel => channel.type === 0 && channel.memberCount);
+    this.client.emit(Events.Debug, `[THREAD-TEXT]: ${badChannels.size} bad channel(s)`);
+    this.client.emit(Events.Debug, JSON.stringify(badChannels));
 
     this.handlePacket();
   }

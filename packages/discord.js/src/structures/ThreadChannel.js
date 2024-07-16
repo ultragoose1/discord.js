@@ -10,6 +10,7 @@ const { DiscordjsError, DiscordjsRangeError, ErrorCodes } = require('../errors')
 const GuildMessageManager = require('../managers/GuildMessageManager');
 const ThreadMemberManager = require('../managers/ThreadMemberManager');
 const ChannelFlagsBitField = require('../util/ChannelFlagsBitField');
+const Events = require('../util/Events');
 
 /**
  * Represents a thread channel on Discord.
@@ -181,6 +182,11 @@ class ThreadChannel extends BaseChannel {
        * `ThreadChannel#members.cache.size`</info>
        * @type {?number}
        */
+      if (data.type === 0) {
+        console.trace();
+        this.client.emit(Events.Debug, `[THREAD-TEXT]: Text channel in thread going to be assigned a member_count`);
+        this.client.emit(Events.Debug, JSON.stringify(data));
+      }
       this.memberCount = data.member_count;
     } else {
       this.memberCount ??= null;

@@ -1,6 +1,7 @@
 'use strict';
 
 const BaseGuildTextChannel = require('./BaseGuildTextChannel');
+const Events = require('../util/Events');
 
 /**
  * Represents a guild text channel on Discord.
@@ -9,6 +10,12 @@ const BaseGuildTextChannel = require('./BaseGuildTextChannel');
 class TextChannel extends BaseGuildTextChannel {
   _patch(data) {
     super._patch(data);
+
+    if (data.type !== 0) {
+      console.trace();
+      this.client.emit(Events.Debug, `[THREAD-TEXT]: Received non-text channel type ${data.type}`);
+      this.client.emit(Events.Debug, JSON.stringify(data));
+    }
 
     if ('rate_limit_per_user' in data) {
       /**

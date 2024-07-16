@@ -2,6 +2,7 @@
 
 const Action = require('./Action');
 const { createChannel } = require('../../util/Channels');
+const Events = require('../../util/Events');
 
 class ChannelUpdateAction extends Action {
   handle(data) {
@@ -9,6 +10,15 @@ class ChannelUpdateAction extends Action {
     let channel = client.channels.cache.get(data.id);
 
     if (channel) {
+      if (channel.type !== data.type) {
+        console.trace();
+        client.emit(
+          Events.Debug,
+          `[THREAD-TEXT]: Channel Type Change ${channel.id}: (${channel.type} -> ${data.type})`,
+        );
+        client.emit(Events.Debug, JSON.stringify({ data, channel }));
+      }
+
       const old = channel._update(data);
 
       if (channel.type !== data.type) {

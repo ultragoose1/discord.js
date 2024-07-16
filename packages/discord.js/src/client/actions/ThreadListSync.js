@@ -23,6 +23,11 @@ class ThreadListSyncAction extends Action {
     }
 
     const syncedThreads = data.threads.reduce((coll, rawThread) => {
+      if (rawThread.type === 0) {
+        console.trace();
+        client.emit(Events.Debug, `[THREAD-TEXT]: Received type 0 in data.threads in thread_list_sync`);
+        client.emit(Events.Debug, JSON.stringify(rawThread));
+      }
       const thread = client.channels._add(rawThread);
       return coll.set(thread.id, thread);
     }, new Collection());
