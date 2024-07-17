@@ -14,9 +14,7 @@ pids
 # Env
 .env
 
-# Dist
-dist
-dist-docs
+
 
 # Miscellaneous
 .tmp
